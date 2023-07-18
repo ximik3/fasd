@@ -323,7 +323,8 @@ EOS
 
     # find all valid path arguments, convert them to simplest absolute form
     local paths="$(while [ "$1" ]; do
-      [ -e "$1" ] && printf %s\\n "$1"; shift
+      [ -e "$1" ] && printf %s\\n "$1" ||
+        [ "${1#'~'}" != "$1" ] && [ -e "$HOME${1#'~'}" ] && printf %s\\n "$HOME${1#'~'}"; shift
     done | sed '/^[^/]/s@^@'"$PWD"'/@
       s@/\.\.$@/../@;s@/\(\./\)\{1,\}@/@g;:0
       s@[^/][^/]*//*\.\./@/@;t 0
